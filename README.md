@@ -31,3 +31,12 @@ python3 manage.py sqlmigrate scraper 0001
 
 # Applying changes 
 python3 manage.py migrate
+
+# Create super user
+python3 manage.py createsuperuser
+#username: admin
+#password: admin123
+#email: admin@scraperX.com
+
+#run the development server
+python3 manage.py runserver
