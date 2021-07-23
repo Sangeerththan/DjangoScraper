@@ -59,9 +59,6 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError("Password must match.")
         return data
 
-
-
-
 class UpdateProfileForm(forms.ModelForm):
     first_name = forms.CharField(label='First Name', required=False, widget=forms.TextInput(
         attrs = {

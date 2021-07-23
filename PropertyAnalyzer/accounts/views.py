@@ -5,7 +5,12 @@ from django.contrib import messages
 
 from .forms import LoginForm, RegisterForm, UpdateProfileForm
 
-# Create your views here.
+
+import requests
+import re
+import pandas as pd
+import ast
+from datetime import datetime
 
 
 def account_home_page(request):
@@ -29,7 +34,7 @@ def login_page(request):
         print("User Logged in : ", request.user.is_authenticated)
         # Redirect to a success page.
         messages.success(request, "Login Successful.")
-        return redirect('/')
+        return redirect('account:manage-data')
     else:
         # Return an 'invalid login' error message.
         print("Error...")
@@ -83,3 +88,25 @@ def update_profile(request):
         'update_form': update_form,
     }
     return render(request, "accounts/account-profile.html", context=context)
+
+def manage_data_page(request):
+    return render(request, "accounts/manage-data.html")
+
+def dashboard_page(request):
+    return render(request, "accounts/dashboard.html")
+
+def scrape(request):
+    data = {
+    'from': '2020-1-01',
+    'to': '2020-3-01'
+    }
+    r = requests.post(url, data=data).json()
+    matches = set(re.findall(r"tender_date': '([^']*)'", str(r)))
+    sort = (sorted(matches, key=lambda k: datetime.strptime(k, '%d.%m.%Y')))
+    print(f"Available Dates: {sort}")
+    opa = re.findall(r"({\'id.*?})", str(r))
+    convert = [ast.literal_eval(x) for x in opa]
+    df = pd.DataFrame(convert)
+    print(df)
+    df.to_csv("data.csv", index=False)
+    return scrape("https://www.sothebysrealty.com/eng/sales/usa")

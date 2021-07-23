@@ -1,23 +1,33 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html lang="en">
+
 {% load static %}
 
-{% block title %} Home Page {% endblock %}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Font-awesome CSS CDN  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+
+    <!-- Custom CSS  -->
+<body>
+    {% include 'navbar.html' %}
+
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="{% static 'imgs/Echo-Dot.jpg' %}" class="d-block w-100">
+            <img src="{% static 'imgs/homePage.jpeg' %}" class="d-block w-100">
             <div class="container">
                 <div class="carousel-caption text-left">
                     <h1>eComm - Shopping rediscovered.</h1>
                     <p>“When you see it online and you can’t stop thinking about it… Order it and have it delivered
                         to you. Don’t overthink it, just do it!”</p>
-                    <p><a class="btn btn-lg btn-primary" href="{% url 'products:product-list' %}" role="button">View
-                            All Products</a></p>
                 </div>
             </div>
         </div>
@@ -48,7 +58,5 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
     </a>
-
-{% block content %}
-
-{% endblock %}
+</div>
+</body>

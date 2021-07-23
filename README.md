@@ -4,6 +4,7 @@
 Django-3.2.5    #
 asgiref-3.4.1
 sqlparse-0.4.1
+pip3 install scrapy-djangoitem django-phone-field django-environ word2number
 
 # version check
 python3 -m django --version
@@ -40,3 +41,6 @@ python3 manage.py createsuperuser
 
 #run the development server
 python3 manage.py runserver
+
+
+# 
