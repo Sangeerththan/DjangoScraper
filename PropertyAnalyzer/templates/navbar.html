@@ -3,10 +3,11 @@
 {% url 'account:register' as register_url %}
 {% url 'account:logout' as logout_url %}
 {% url 'account:account-home' as account_home_url %}
+{% url 'account:dashboard' as dashboard_url %}
 
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top mb-3 bg-dark py-1">
     <div class="container">
-        <a class="navbar-brand" href="{{ home_url }}">PropertyAnalyzer</a>
+        <a class="navbar-brand" href="{{ dashboard_url }}">PropertyAnalyzer</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
