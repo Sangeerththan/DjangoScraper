@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} Account Home {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 d-flex flex-wrap">
+            <h2>Account : {% if request.user.first_name %} {{ request.user.first_name }} {{ request.user.last_name }}
+                {% else %} {{ request.user }} {% endif %}</h2>
+            {% if request.user.is_superuser %}
+            <div class="btn-toolbar mb-2 mb-md-0 ml-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary ">
+                    <span data-feather="calendar"></span>
+                    Superuser Account - Admin <i class="fas fa-user-cog fa-lg ml-1"></i>
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-12">
+            <hr>
+        </div>             
+
+        <div class="col-12">
+            <hr>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
