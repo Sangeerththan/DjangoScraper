@@ -7,10 +7,11 @@ from .forms import LoginForm, RegisterForm, UpdateProfileForm
 
 
 import requests
-import re
+import re, json
 import pandas as pd
 import ast
 from datetime import datetime
+from urllib.request import urlopen
 
 
 def account_home_page(request):
@@ -95,18 +96,43 @@ def manage_data_page(request):
 def dashboard_page(request):
     return render(request, "accounts/dashboard.html")
 
-def scrape(request):
-    data = {
-    'from': '2020-1-01',
-    'to': '2020-3-01'
-    }
-    r = requests.post(url, data=data).json()
-    matches = set(re.findall(r"tender_date': '([^']*)'", str(r)))
-    sort = (sorted(matches, key=lambda k: datetime.strptime(k, '%d.%m.%Y')))
-    print(f"Available Dates: {sort}")
-    opa = re.findall(r"({\'id.*?})", str(r))
-    convert = [ast.literal_eval(x) for x in opa]
-    df = pd.DataFrame(convert)
+def scrape_page(request):
+    if request.method == "POST":
+        if ('url' in request.POST):
+            url = request.POST.get('url', 'https://www.sothebysrealty.com/eng/sales/usa')
+    else:
+        url = 'https://parade.com/937586/parade/life-quotes/'
+        # url = "http://www.ibex.bg/ajax/tenders_ajax.php"
+    di = scrape(url)
+    print(di)
+    return render(request, "accounts/manage-data.html")
+
+def scrape(url):
+    data = {}
+    r = requests.get(url, data=data)
+    matches = r.text
+    # sort = (sorted(matches, key=lambda k: datetime.strptime(k, '%d.%m.%Y')))
+    print("Available Dates: "+str(type(matches)))
+    opa = re.findall(r"\w+ly", matches)
+    # convert = [ast.literal_eval(x) for x in opa]
+    df = pd.DataFrame(opa)
     print(df)
     df.to_csv("data.csv", index=False)
-    return scrape("https://www.sothebysrealty.com/eng/sales/usa")
+    res_dct = {}
+    # res_dct = {convert[i]: convert[i + 1] for i in range(0, len(convert), 2)}
+    return res_dct
+
+# def scrape(url):
+#     url = "https://quotes.yourdictionary.com/wikipedia"
+#     hdr = {
+#             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+#             'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'         
+#     }
+#     page = urlopen(url, data=bytes(json.dumps(hdr), encoding="utf-8"))
+#     html = page.read().decode("ascii")
+#     pattern = "<title.*?>.*?</title.*?>"
+#     match_results = re.search(pattern, html, re.IGNORECASE)
+#     title = match_results.group()
+#     title = re.sub("<.*?>", "", title) # Remove HTML tags
+#     convert = [ast.literal_eval(x) for x in ti]
+#     return title

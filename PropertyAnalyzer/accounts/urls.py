@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import account_home_page, login_page, logout_page, register_page,dashboard_page, manage_data_page, scrape
+from .views import account_home_page, login_page, logout_page, register_page,dashboard_page, manage_data_page, scrape_page
 
 
 app_name = 'account'
@@ -12,5 +12,5 @@ urlpatterns = [
     path('register/', register_page, name='register'),
     path('manageData/',manage_data_page, name='manage-data'),
     path('dashboard/',dashboard_page, name='dashboard'),
-    path('scrape/',scrape, name='scrape')
+    path('scrape/',scrape_page, name='scrape')
 ]

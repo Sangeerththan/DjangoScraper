@@ -40,8 +40,8 @@
                 <a href="{{ manage_data_url }}">Manage Data</a>
             </div>
         </div>
-        <div class="col-8 center-align">
-            <button type="submit" value="https://www.sothebysrealty.com/eng/sales/usa" onclick="href='{{ scrape_url }}'" name='btn1'>ScrapeNow</button>
+        <div class="col-8 center-align" id="scrape-btn">
+            <button type="button" type="submit" onclick="location.href='{{ scrape_url }}'" name='url'>ScrapeNow</button>
         </div>
     </div>
     {% block content %}
