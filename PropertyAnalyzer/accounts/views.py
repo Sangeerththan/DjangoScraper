@@ -12,6 +12,9 @@ import pandas as pd
 import ast
 from datetime import datetime
 from urllib.request import urlopen
+from bs4 import BeautifulSoup # for scraping webpages
+import time  
+from bs4.element import Tag
 
 
 def account_home_page(request):
@@ -103,36 +106,50 @@ def scrape_page(request):
     else:
         url = 'https://parade.com/937586/parade/life-quotes/'
         # url = "http://www.ibex.bg/ajax/tenders_ajax.php"
-    di = scrape(url)
-    print(di)
-    return render(request, "accounts/manage-data.html")
+    context = scrape(url)
+    return render(request, "accounts/manage-data.html", context=context)
 
 def scrape(url):
     data = {}
     r = requests.get(url, data=data)
-    matches = r.text
-    # sort = (sorted(matches, key=lambda k: datetime.strptime(k, '%d.%m.%Y')))
-    print("Available Dates: "+str(type(matches)))
-    opa = re.findall(r"\w+ly", matches)
-    # convert = [ast.literal_eval(x) for x in opa]
-    df = pd.DataFrame(opa)
-    print(df)
-    df.to_csv("data.csv", index=False)
-    res_dct = {}
-    # res_dct = {convert[i]: convert[i + 1] for i in range(0, len(convert), 2)}
-    return res_dct
+    html = r.text
+    output_dict = scrapeFromHtml(html)
+    output_df = pd.DataFrame(output_dict, columns = output_dict.keys())
+    print(output_df)
+    output_df.to_csv("data.csv", index=False)
+    return output_dict
 
-# def scrape(url):
-#     url = "https://quotes.yourdictionary.com/wikipedia"
-#     hdr = {
-#             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-#             'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'         
-#     }
-#     page = urlopen(url, data=bytes(json.dumps(hdr), encoding="utf-8"))
-#     html = page.read().decode("ascii")
-#     pattern = "<title.*?>.*?</title.*?>"
-#     match_results = re.search(pattern, html, re.IGNORECASE)
-#     title = match_results.group()
-#     title = re.sub("<.*?>", "", title) # Remove HTML tags
-#     convert = [ast.literal_eval(x) for x in ti]
-#     return title
+def scrapeFromHtml(html):
+    soup = BeautifulSoup(html,'html.parser')
+    result_div = soup.find_all('div')
+
+    links = []
+    titles = []
+    descriptions = []
+    for r in result_div:
+        # Checks if each element is present, else, raise exception
+        try:
+            link = r.find('a', href=True)
+            title = None
+            title = r.find('h3')
+
+            if isinstance(title,Tag):
+                title = title.get_text()
+
+            description = None
+            description = r.find('span', attrs={'class': 'page_article'})
+
+            if isinstance(description, Tag):
+                description = description.get_text()
+
+            # Check to make sure everything is present before appending
+            if link != '' and title != '' and description != '':
+                links.append(link['href'])
+                titles.append(title)
+                descriptions.append(description)
+        # Next loop if one element is not present
+        except Exception as e:
+            print(e)
+            continue
+    output_dict = {'Title':titles, 'URL': links, 'Description':descriptions}
+    return output_dict
