@@ -4,7 +4,6 @@
 Django-3.2.5    #
 asgiref-3.4.1
 sqlparse-0.4.1
-pip3 install scrapy-djangoitem django-phone-field django-environ word2number
 
 # version check
 python3 -m django --version
@@ -42,5 +41,18 @@ python3 manage.py createsuperuser
 #run the development server
 python3 manage.py runserver
 
+# if sqlite3 is not present in ubuntu 20.04 install with apt
+sudo apt install sqlite3
 
-# 
+
+# installation steps
+1. Install dpendencies with pip3 in ubutu use pip in windows
+pip3 install -r requirements.txt
+
+2. make migrations should be run inside base Property Analyzer directory
+pytohn3 manage.py makemigrations
+
+3.Run the server in the Property Analyzer directory(top Level)
+python3 manage.py runserver
+
+Note: If you are using ubuntu you can run the ./install.sh inside root property Analyser directory
