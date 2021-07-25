@@ -1,12 +1,13 @@
-echo '-----------------------------Installation started------------------------'
-echo '-----------------------------Install sqlite3-----------------------------'
+echo '-----------------------------Property Analyzer Installation started-------------------------'
+echo '-----------------------------Install sqlite3------------------------------------------------'
 sudo apt install sqlite3
-echo '----------------------------- sqlite3 successfully installed ------------'
-echo '-----------------------------Install dependencies-----------------------------'
+echo '----------------------------- sqlite3 successfully installed -------------------------------'
+echo '-----------------------------Install dependencies-------------------------------------------'
 pip3 install -r requirements.txt
-echo '----------------------------- Dependencies successfully installed ------------'
-echo '---------------------------- running migrations -------------------------'
+echo '----------------------------- Dependencies successfully installed --------------------------'
+echo '---------------------------- Running migrations --------------------------------------------'
 python3 manage.py makemigrations
-echo '----------------------------completed migrations--------------------------'
-echo '----------------------------starting server------------------------------ '
+echo '----------------------------Completed migrations--------------------------------------------'
+echo '-------Installation completed succcessfully and server is about to start--------------------'
+echo '----------------------------starting server-------------------------------------------------'
 python3 manage.py runserver
