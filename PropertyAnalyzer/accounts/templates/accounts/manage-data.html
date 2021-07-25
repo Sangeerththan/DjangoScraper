@@ -40,14 +40,16 @@
                 <a href="{{ manage_data_url }}">Manage Data</a>
             </div>
         </div>
-        <div class="col-8 center-align" id="scrape-btn">
-            <button type="button" type="submit" onclick="location.href='{{ scrape_url }}'" name='url'>ScrapeNow</button>
+        <div class="col-8 center-align">
+            <div class="scrape-div">
+                <button class="scrape-btn" type="button" type="submit" onclick="location.href='{{ scrape_url }}'" name='url'>ScrapeNow</button>
+            </div>
+            <div class="scrape-table">
+                <img  src="{% static 'imgs/scrapetable.png' %}" alt="Nothing to display" width="600" height="600">
+            </div> 
         </div>
-        {{context}}
-    </div>
-    {% block content %}
         
-    {% endblock %}
+    </div>
 </div>
 
 

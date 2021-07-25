@@ -1,7 +1,3 @@
-#scrape-btn {
-    color: blue;
-    border-radius: 1.2;
-}
 .sidenav {
     height:100%;
     width:160px;
@@ -142,4 +138,20 @@
     .featurette-heading {
         margin-top: 7rem;
     }
+}
+
+.scrape-table {
+    padding-left: 150px;
+    padding-top: 50px;
+}
+.scrape-div {
+    margin: auto;
+    width: fit-content;
+}
+.scrape-btn {
+    color: blue;
+    background: aquamarine;
+    margin-top: 25px;
+    margin-left: 2rem;
+    width: fit-content;
 }

@@ -15,6 +15,8 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup # for scraping webpages
 import time  
 from bs4.element import Tag
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def account_home_page(request):
@@ -104,19 +106,37 @@ def scrape_page(request):
         if ('url' in request.POST):
             url = request.POST.get('url', 'https://www.sothebysrealty.com/eng/sales/usa')
     else:
-        url = 'https://parade.com/937586/parade/life-quotes/'
+        url = 'https://www.google.com/'
         # url = "http://www.ibex.bg/ajax/tenders_ajax.php"
     context = scrape(url)
-    return render(request, "accounts/manage-data.html", context=context)
+    title = context['Title']
+    urls = context['URL']
+    description = context['Description']
+    scrape_output = {'title': title, 'urls': urls, 'description': description}
+    data = {'scrape_output': scrape_output}
+    # print(scrape_output['title'])
+    return render(request, "accounts/manage-data.html", context=data)
 
 def scrape(url):
     data = {}
     r = requests.get(url, data=data)
     html = r.text
     output_dict = scrapeFromHtml(html)
-    output_df = pd.DataFrame(output_dict, columns = output_dict.keys())
-    print(output_df)
-    output_df.to_csv("data.csv", index=False)
+    df = pd.DataFrame(output_dict, columns = output_dict.keys())
+    df = df.iloc[:25]
+    # print(output_df)
+    fig, ax = plt.subplots()
+    # f, (a0, a1) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [3, 1]})
+    ax.axis('off')
+    ax.axis('tight')
+    t= ax.table(cellText=df.values, colWidths=[0.4, 0.5, 0.3], colLabels=df.columns,  loc='center')
+    t.auto_set_font_size(False) 
+    t.set_fontsize(6)
+    # t.scale(2, 2)
+    # fig.tight_layout()
+    # plt.show()
+    plt.savefig('./static_dir/imgs/scrapetable.png')
+    df.to_csv("data.csv", index=False)
     return output_dict
 
 def scrapeFromHtml(html):
@@ -144,6 +164,8 @@ def scrapeFromHtml(html):
 
             # Check to make sure everything is present before appending
             if link != '' and title != '' and description != '':
+                if len(link['href']) > 50:
+                    link['href'] = link['href'][0:50]
                 links.append(link['href'])
                 titles.append(title)
                 descriptions.append(description)
