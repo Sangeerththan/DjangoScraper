@@ -3,6 +3,15 @@
 
 {% load static %}
 
+{% url 'home' as home_url %}
+{% url 'account:login' as login_url %}
+{% url 'account:register' as register_url %}
+{% url 'account:logout' as logout_url %}
+{% url 'account:account-home' as account_home_url %}
+{% url 'account:manage-data' as manage_data_url %}
+{% url 'account:dashboard' as dashboard_url %}
+{% url 'account:scrape' as scrape_url %}
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,7 +26,29 @@
 
     <!-- Custom CSS  -->
 <body>
-{% include 'navbar.html' %}
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top mb-3 bg-dark py-1">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">                             
+            {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Account
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{{ logout_url }}">Logout: {{ request.user }}</a>
+                    </div>
+                  </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ login_url }}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ register_url }}">Register</a>
+            </li>
+        </ul>
+    </div>
+    </nav>
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
         <div class="carousel-item active">
