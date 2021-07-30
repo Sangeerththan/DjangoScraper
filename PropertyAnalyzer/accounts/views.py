@@ -5,7 +5,6 @@ from django.contrib import messages
 
 from .forms import LoginForm, RegisterForm, UpdateProfileForm
 
-
 import requests
 import re, json
 import pandas as pd
@@ -106,15 +105,13 @@ def scrape_page(request):
         if ('url' in request.POST):
             url = request.POST.get('url', 'https://www.sothebysrealty.com/eng/sales/usa')
     else:
-        url = 'https://www.google.com/'
-        # url = "http://www.ibex.bg/ajax/tenders_ajax.php"
+        url = 'https://www.landsofamerica.com/United-States/all-land/'
     context = scrape(url)
     title = context['Title']
     urls = context['URL']
     description = context['Description']
     scrape_output = {'title': title, 'urls': urls, 'description': description}
     data = {'scrape_output': scrape_output}
-    # print(scrape_output['title'])
     return render(request, "accounts/manage-data.html", context=data)
 
 def scrape(url):
@@ -124,17 +121,12 @@ def scrape(url):
     output_dict = scrapeFromHtml(html)
     df = pd.DataFrame(output_dict, columns = output_dict.keys())
     df = df.iloc[:25]
-    # print(output_df)
     fig, ax = plt.subplots()
-    # f, (a0, a1) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [3, 1]})
     ax.axis('off')
     ax.axis('tight')
     t= ax.table(cellText=df.values, colWidths=[0.4, 0.5, 0.3], colLabels=df.columns,  loc='center')
     t.auto_set_font_size(False) 
     t.set_fontsize(6)
-    # t.scale(2, 2)
-    # fig.tight_layout()
-    # plt.show()
     plt.savefig('./static_dir/imgs/scrapetable.png')
     df.to_csv("data.csv", index=False)
     return output_dict
@@ -153,22 +145,22 @@ def scrapeFromHtml(html):
             title = None
             title = r.find('h3')
 
-            if isinstance(title,Tag):
-                title = title.get_text()
+            # if isinstance(title,Tag):
+            #     title = title.get_text()
 
-            description = None
-            description = r.find('span', attrs={'class': 'page_article'})
+            # description = None
+            # description = r.find('span', attrs={'class': 'page_article'})
 
-            if isinstance(description, Tag):
-                description = description.get_text()
+            # if isinstance(description, Tag):
+            #     description = description.get_text()
 
             # Check to make sure everything is present before appending
-            if link != '' and title != '' and description != '':
+            if link != '':
                 if len(link['href']) > 50:
                     link['href'] = link['href'][0:50]
                 links.append(link['href'])
                 titles.append(title)
-                descriptions.append(description)
+                # descriptions.append(description)
         # Next loop if one element is not present
         except Exception as e:
             print(e)
